@@ -22,6 +22,7 @@
         <tr>
             <th scope="col">Name</th>
             <th scope="col">Location</th>
+            <th scope="col">Drops</th>
         </tr>
         </thead>
         <tbody>
@@ -30,10 +31,9 @@
         </tr>
         </tbody>
     </table>
-
 </div>
 
-<script src="s/navbar.js" ></script>
+<script src="s/navbar.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
@@ -42,7 +42,7 @@
     $(document).ready(function () {
         // Fetch mob data from the server
         $.ajax({
-            url: '/api/mobs', // Update the URL to your API endpoint
+            url: '/api/mobs',
             method: 'GET',
             dataType: 'json',
             success: function (mobData) {
@@ -56,28 +56,55 @@
                     success: function (planetData) {
                         console.log('Fetched planet data:', planetData);
 
-                        // Map planet ID to planet name in mob data
-                        mobData.forEach(function (mob) {
-                            const matchingPlanet = planetData.find(planet => planet.ID === mob.PlanetID);
-                            mob.PlanetName = matchingPlanet ? matchingPlanet.Name : 'Unknown Planet';
+                        // Fetch loot data from the server
+                        $.ajax({
+                            url: '/api/loot',
+                            method: 'GET',
+                            dataType: 'json',
+                            success: function (lootData) {
+                                console.log('Fetched loot data:', lootData);
+
+                                // Map MobID to loot names in mob data
+                                mobData.forEach(function (mob) {
+                                    const matchingLoot = lootData.filter(loot => loot.MobID === mob.ID);
+                                    mob.LootNames = matchingLoot.map(loot => loot.drop_name);
+                                });
+
+                                console.log('Combined mob data with loot:', mobData);
+
+                                // Map planet ID to planet name in mob data
+                                mobData.forEach(function (mob) {
+                                    const matchingPlanet = planetData.find(planet => planet.ID === mob.PlanetID);
+                                    mob.PlanetName = matchingPlanet ? matchingPlanet.Name : 'Unknown Planet';
+                                });
+
+                                // Initialize DataTable with the combined data
+                                $('#mobTable').DataTable({
+                                    data: mobData,
+                                    columns: [
+                                        { data: 'MobName' },
+                                        { data: 'PlanetName' },
+                                        {
+                                            data: null,
+                                            render: function (data, type, row) {
+                                                return row.LootNames ? row.LootNames.join(', ') : 'No drops';
+                                            }
+                                        }
+                                    ],
+                                    paging: true,
+                                    autoWidth: true,
+                                    ordering: true,
+                                    pagingType: "full",
+                                    dom: '<"top"f>rt<"bottom"lip><"clear">',
+                                    paging: true,
+                                    lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+                                    pageLength: 20,
+                                });
+                            },
+                            error: function (error) {
+                                console.error('Error fetching loot data:', error);
+                            }
                         });
-
-                        console.log('Combined mob data:', mobData);
-
-                        // Initialize DataTable with the combined data
-                        $('#mobTable').DataTable({
-                            data: mobData,
-                            columns: [
-                                { data: 'Name' },
-                                { data: 'PlanetName' }, // Check if this column is correctly specified
-                            ],
-                            paging: true, // Enable pagination
-                            autoWidth: true,
-                            ordering: true,
-                            pagingType: "full",
-                            dom: '<"top"f>rt<"bottom"lip><"clear">', paging: true, lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ], pageLength: 20,
-                        });
-
                     },
                     error: function (error) {
                         console.error('Error fetching planet data:', error);
@@ -90,8 +117,6 @@
         });
     });
 </script>
-
-
 </body>
 
 </html>
