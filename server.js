@@ -31,10 +31,24 @@ app.use((req, res, next) => {
     next();
 });
 
-// Define the endpoint to fetch mob data
+// Define the endpoint to fetch planet data
+app.get('/api/planets', (req, res) => {
+    console.log('Fetching planet data...');
+    const sql = 'SELECT ID, Name FROM planet WHERE Visible = 1';
+    dbConnection.query(sql, (error, results) => {
+        if (error) {
+            console.error('Error executing database query:', error.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            console.log('Planet data fetched successfully:', results);
+            res.json(results);
+        }
+    });
+});
+
 app.get('/api/mobs', (req, res) => {
     console.log('Fetching mob data...');
-    const sql = 'SELECT ID, Name, Stab, Cut, Impact, Penetration, Shrapnel, Burn, Cold, Acid, Electric, Speed, Combat, Movement, ClassID, ImageID, Visible, Tamable, Sweatable, ActivityID, ScanActID, Attacks, Range, Aggression, PlanetID, MinHP, MinGlobal FROM wiki.mob';  // Adjusted query
+    const sql = 'SELECT mob.ID, mob.Name, CAST(mob.PlanetID AS SIGNED) AS PlanetID, planet.Name AS PlanetName FROM wiki.mob AS mob LEFT JOIN wiki.planet AS planet ON mob.PlanetID = planet.ID';
     dbConnection.query(sql, (error, results) => {
         if (error) {
             console.error('Error executing database query:', error.message);
