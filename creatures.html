@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+    <title>Mob Table</title>
+</head>
+
+<body>
+
+<div class="container mt-5">
+    <h2>Mob Table</h2>
+
+    <table id="mobTable" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Stab</th>
+            <th>Cut</th>
+            <th>Impact</th>
+            <th>Penetration</th>
+            <th>Shrapnel</th>
+            <th>Burn</th>
+            <th>Cold</th>
+            <th>Acid</th>
+            <th>Electric</th>
+            <th>Speed</th>
+            <th>Combat</th>
+            <th>Movement</th>
+            <th>ClassID</th>
+            <th>ImageID</th>
+            <th>Visible</th>
+            <th>Tamable</th>
+            <th>Sweatable</th>
+            <th>ActivityID</th>
+            <th>ScanActID</th>
+            <th>Attacks</th>
+            <th>Range</th>
+            <th>Aggression</th>
+            <th>PlanetID</th>
+            <th>MinHP</th>
+            <th>MinGlobal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Table data will be dynamically populated here -->
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Fetch mob data from the server
+        $.ajax({
+            url: '/api/mobs', // Update the URL to your API endpoint
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Initialize DataTable
+                $('#mobTable').DataTable({
+                    data: data,
+                    columns: [
+                        {data: 'ID'},
+                        {data: 'Name'},
+                        {data: 'Stab'},
+                        {data: 'Cut'},
+                        {data: 'Impact'},
+                        {data: 'Penetration'},
+                        {data: 'Shrapnel'},
+                        {data: 'Burn'},
+                        {data: 'Cold'},
+                        {data: 'Acid'},
+                        {data: 'Electric'},
+                        {data: 'Speed'},
+                        {data: 'Combat'},
+                        {data: 'Movement'},
+                        {data: 'ClassID'},
+                        {data: 'ImageID'},
+                        {data: 'Visible'},
+                        {data: 'Tamable'},
+                        {data: 'Sweatable'},
+                        {data: 'ActivityID'},
+                        {data: 'ScanActID'},
+                        {data: 'Attacks'},
+                        {data: 'Range'},
+                        {data: 'Aggression'},
+                        {data: 'PlanetID'},
+                        {data: 'MinHP'},
+                        {data: 'MinGlobal'}
+                    ],
+                    lengthMenu: [10, 20, 40, 50, -1],
+                    pageLength: 10
+                });
+            },
+            error: function (error) {
+                console.error('Error fetching mob data:', error);
+            }
+        });
+    });
+</script>
+
+</body>
+
+</html>
