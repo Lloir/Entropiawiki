@@ -60,6 +60,22 @@ app.get('/api/mobs', (req, res) => {
     });
 });
 
+// Define the endpoint to fetch society data
+app.get('/api/societies', (req, res) => {
+    console.log('Fetching society data...');
+    const sql = 'SELECT ID, Name, Founder_, Leader_, FoundTime, URL FROM wiki.society';
+    dbConnection.query(sql, (error, results) => {
+        if (error) {
+            console.error('Error executing database query:', error.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            console.log('Society data fetched successfully:', results);
+            res.json(results);
+        }
+    });
+});
+
+
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
 });
