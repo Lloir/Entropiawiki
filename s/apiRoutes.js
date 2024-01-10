@@ -98,4 +98,27 @@ router.get('/allData', (req, res) => {
     });
 });
 
+router.get('/vehicles', (req, res) => {
+    console.log('Fetching vehicle data...');
+
+    const sqlVehicles = `
+        SELECT
+            ID,
+            Name AS VehicleName,
+            Type,
+            Price
+        FROM wiki.vehicle;
+    `;
+
+    dbConnection.query(sqlVehicles, (error, results) => {
+        if (error) {
+            console.error('Error executing vehicle query:', error.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            console.log('Vehicle data fetched successfully:', results);
+            res.json(results);
+        }
+    });
+});
+
 module.exports = router;
