@@ -8,6 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 
     <title>Mob Table</title>
+    <style>
+        .truncated-list {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px; /* Adjust the maximum width as needed */
+            cursor: pointer;
+            color: #007bff; /* Bootstrap primary color, change as needed */
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,6 +28,7 @@
 <div class="container mt-5">
     <h2>Mob Table</h2>
 
+    <!-- Table to display mob data -->
     <table id="mobTable" class="table table-dark table-striped">
         <thead>
         <tr>
@@ -26,6 +38,7 @@
         </tr>
         </thead>
         <tbody>
+        <!-- Placeholder row, you may remove this or replace it with actual data -->
         <tr class="table-dark">
             <th scope="row">Dark</th>
         </tr>
@@ -33,90 +46,32 @@
     </table>
 </div>
 
-<script src="s/navbar.js"></script>
+
+<!-- Include necessary scripts -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        // Fetch mob data from the server
-        $.ajax({
-            url: '/api/mobs',
-            method: 'GET',
-            dataType: 'json',
-            success: function (mobData) {
-                console.log('Fetched mob data:', mobData);
+<!-- My Shit -->
+<script src="s/navbar.js"></script>
+<script src="s/mobTableScript.js"></script>
 
-                // Fetch planet data from the server
-                $.ajax({
-                    url: '/api/planets',
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function (planetData) {
-                        console.log('Fetched planet data:', planetData);
 
-                        // Fetch loot data from the server
-                        $.ajax({
-                            url: '/api/loot',
-                            method: 'GET',
-                            dataType: 'json',
-                            success: function (lootData) {
-                                console.log('Fetched loot data:', lootData);
-
-                                // Map MobID to loot names in mob data
-                                mobData.forEach(function (mob) {
-                                    const matchingLoot = lootData.filter(loot => loot.MobID === mob.ID);
-                                    mob.LootNames = matchingLoot.map(loot => loot.drop_name);
-                                });
-
-                                console.log('Combined mob data with loot:', mobData);
-
-                                // Map planet ID to planet name in mob data
-                                mobData.forEach(function (mob) {
-                                    const matchingPlanet = planetData.find(planet => planet.ID === mob.PlanetID);
-                                    mob.PlanetName = matchingPlanet ? matchingPlanet.Name : 'Unknown Planet';
-                                });
-
-                                // Initialize DataTable with the combined data
-                                $('#mobTable').DataTable({
-                                    data: mobData,
-                                    columns: [
-                                        { data: 'MobName' },
-                                        { data: 'PlanetName' },
-                                        {
-                                            data: null,
-                                            render: function (data, type, row) {
-                                                return row.LootNames ? row.LootNames.join(', ') : 'No drops';
-                                            }
-                                        }
-                                    ],
-                                    paging: true,
-                                    autoWidth: true,
-                                    ordering: true,
-                                    pagingType: "full",
-                                    dom: '<"top"f>rt<"bottom"lip><"clear">',
-                                    paging: true,
-                                    lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-                                    pageLength: 20,
-                                });
-                            },
-                            error: function (error) {
-                                console.error('Error fetching loot data:', error);
-                            }
-                        });
-                    },
-                    error: function (error) {
-                        console.error('Error fetching planet data:', error);
-                    }
-                });
-            },
-            error: function (error) {
-                console.error('Error fetching mob data:', error);
-            }
-        });
-    });
-</script>
+<!-- Bootstrap Modal for Expanding Truncated Lists -->
+<div class="modal fade" id="expandModal" tabindex="-1" aria-labelledby="expandModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="expandModalLabel">Expanded Loot List</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="expandModalBody">
+                <!-- Loot list content dynamically populated -->
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>
