@@ -1,0 +1,10 @@
+# Database Configuration
+DB_HOST=127.0.0.1
+DB_USER=test
+DB_PASSWORD=test
+DB_DATABASE=wiki
+
+# Certbot Options
+CERTBOT_EMAIL=your-email@example.com
+CERTBOT_DOMAINS=example.com,www.example.com
+CERTBOT_RENEWAL_DAYS=30
