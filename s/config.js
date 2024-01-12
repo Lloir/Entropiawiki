@@ -5,4 +5,10 @@ module.exports = {
         password: 'test', // Change to your DB USER PASS
         database: 'wiki', // Set to your DB
     },
+    certbotOptions: {
+        certbotBin: 'certbot-auto', // Adjust if needed
+        email: 'your-email@example.com', // Provide your email for renewal notifications
+        domains: ['example.com', 'www.example.com'], // Add your domain(s)
+        renewalDays: 30, // Number of days before expiration to renew
+    },
 };
