@@ -1,55 +1,57 @@
-// mobTableScript.js
-
 $(document).ready(function () {
-    // Fetch all data from the server
+    // Flag to check if elements are already created
+    let elementsCreated = false;
+
+    // Function to create checkboxes and th elements
+    function createElementsOnce(mobDataTable) {
+        if (!elementsCreated) {
+            // Extract column names from the first table object
+            const columns = Object.keys(mobDataTable[0]);
+
+            // Dynamically create checkboxes for column visibility
+            const checkboxContainer = $('#checkboxContainer');
+            columns.forEach(column => {
+                const checkboxId = `column${column}Checkbox`;
+                checkboxContainer.append(`
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" id="${checkboxId}" checked>
+                        <label class="form-check-label" for="${checkboxId}">${column}</label>
+                    </div>
+                `);
+            });
+
+            // Dynamically create th elements for columns
+            const tableHead = $('#mobDataTable thead tr');
+            columns.forEach(column => {
+                tableHead.append(`<th scope="col" class="column${column}">${column}</th>`);
+            });
+
+            // Set the flag to true
+            elementsCreated = true;
+        }
+    }
+
+    // Fetch table data from the server and dynamically create checkboxes and columns
     $.ajax({
         url: '/api/allData',
         method: 'GET',
         dataType: 'json',
-        success: function (allData) {
-            console.log('Fetched all data:', allData);
+        success: function (mobDataTable) {
+            console.log('Fetched mobDataTable:', mobDataTable);
 
-            // Group loot drops by mob name (case-insensitive)
-            const mobDataGrouped = {};
+            // Call the function to create elements once
+            createElementsOnce(mobDataTable);
 
-            allData.forEach(item => {
-                const mobNameKey = item.MobName.toLowerCase();
-
-                if (!mobDataGrouped[mobNameKey]) {
-                    mobDataGrouped[mobNameKey] = {
-                        ID: item.ID,
-                        MobName: item.MobName,
-                        PlanetName: item.PlanetName,
-                        LootNames: [],
+            // Initialize DataTable with dynamically created columns
+            const dataTable = $('#mobDataTable').DataTable({
+                data: mobDataTable,
+                columns: Object.keys(mobDataTable[0]).map(column => {
+                    return {
+                        data: column,
+                        title: column,
+                        visible: true, // Initially set all columns to visible
                     };
-                }
-
-                if (item.LootNames && item.LootNames.length > 0) {
-                    mobDataGrouped[mobNameKey].LootNames.push(...item.LootNames.split(','));
-                }
-            });
-
-            // Convert the grouped data to an array
-            const mobData = Object.values(mobDataGrouped);
-
-            console.log('Processed mobData:', mobData);
-
-            // Initialize DataTable with the combined data
-            const dataTable = $('#mobTable').DataTable({
-                data: mobData,
-                columns: [
-                    { data: 'MobName' },
-                    { data: 'PlanetName' },
-                    {
-                        data: null,
-                        render: function (data, type, row) {
-                            console.log('LootNames for ' + row.MobName + ':', row.LootNames);
-                            return row.LootNames.length
-                                ? '<div class="truncated-list" data-bs-toggle="modal" data-bs-target="#expandModal" data-loot="' + row.LootNames.join(', ') + '">' + row.LootNames.join(', ') + '</div>'
-                                : 'No drops';
-                        }
-                    }
-                ],
+                }),
                 paging: true,
                 autoWidth: true,
                 ordering: true,
@@ -59,19 +61,26 @@ $(document).ready(function () {
                 lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 pageLength: 20,
                 drawCallback: function (settings) {
-                    console.log('Rendered DataTable HTML:', $('#mobTable').html());
+                    console.log('Rendered DataTable HTML:', $('#mobDataTable').html());
                 }
             });
 
-            // Handle row click event to populate the modal content
-            $('#mobTable tbody').on('click', 'tr', function () {
-                const data = dataTable.row(this).data();
-                const lootContent = data.LootNames.length ? data.LootNames.join('<br>') : 'No drops';
-                $('#expandModalBody').html(lootContent);
+            // Event listener for checkboxes to toggle column visibility
+            $(document).on('change', 'input[type="checkbox"]', function () {
+                const columnClass = $(this).attr('id').replace('Checkbox', '');
+                toggleColumnVisibility(dataTable, columnClass);
             });
         },
         error: function (error) {
-            console.error('Error fetching all data:', error);
+            console.error('Error fetching mobDataTable:', error);
         }
     });
 });
+
+// Function to toggle column visibility
+function toggleColumnVisibility(dataTable, columnClass) {
+    const columnIndex = dataTable.column(`.${columnClass}`).index();
+    const isVisible = dataTable.column(columnIndex).visible();
+
+    dataTable.column(columnIndex).visible(!isVisible);
+}

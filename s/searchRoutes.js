@@ -1,7 +1,7 @@
 // searchRoutes.js
 const express = require('express');
 const router = express.Router();
-const dbConnection = require('../config'); // Adjust the path based on your project structure
+const dbConnection = require('./config.js');
 
 router.get('/', (req, res) => {
     const searchTerm = req.query.term;

@@ -1,6 +1,6 @@
 const express = require('express');
 const mysql = require('mysql');
-const config = require('./config'); // Adjust the path based on your project structure
+const config = require('./config.js'); // Adjust the path based on your project structure
 
 const router = express.Router();
 const dbConnection = mysql.createConnection(config.dbConfig);
@@ -98,6 +98,7 @@ router.get('/allData', (req, res) => {
     });
 });
 
+// Define the endpoint to fetch vehicle data
 router.get('/vehicles', (req, res) => {
     console.log('Fetching vehicle data...');
 
@@ -116,6 +117,41 @@ router.get('/vehicles', (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
         } else {
             console.log('Vehicle data fetched successfully:', results);
+            res.json(results);
+        }
+    });
+});
+
+// Define the endpoint to fetch armor data
+router.get('/armor', (req, res) => {
+    console.log('Fetching armor data...');
+    const sql = `
+        SELECT
+            armor.Name AS ArmorName,
+            armor.Stab,
+            armor.Cut,
+            armor.Impact,
+            armor.Penetration,
+            armor.Shrapnel,
+            armor.Burn,
+            armor.Cold,
+            armor.Acid,
+            armor.Electric,
+            armor.Durability,
+            armor.Crafted,
+            armor.Source,
+            planet.Name AS PlanetName,  -- Fetch planet name from the joined table
+            armor.PersonalEffrcys
+        FROM wiki.armor
+        LEFT JOIN wiki.planet ON armor.PlanetID = planet.ID
+    `;
+
+    dbConnection.query(sql, (error, results) => {
+        if (error) {
+            console.error('Error executing database query:', error.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            console.log('Armor data fetched successfully:', results);
             res.json(results);
         }
     });

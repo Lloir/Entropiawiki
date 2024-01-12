@@ -1,11 +1,22 @@
-<link rel="stylesheet" href="/css/mdb.dark.min.css">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/mdb.dark.min.css">
 
-<!-- navbar.html -->
+</head>
+<body>
+
+<!-- Banner for Testing and Updates -->
+<div class="container-fluid bg-warning text-dark text-center p-2">
+    <strong>This website is still in testing and being updated often. Thank you for your understanding!</strong>
+</div>
+
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="https://entropiawiki.co.uk">
             <img src="/images/logo.png" alt="Your Logo" height="140">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -15,7 +26,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href='Armor.html' class="nav-link">Armor</a>
+                    <a href='/h/armor.html' class="nav-link">Armor</a>
                 </li>
                 <li class="nav-item">
                     <a href='/h/creatures.html' class="nav-link">Creatures</a>
@@ -26,27 +37,30 @@
                 <li class="nav-item">
                     <a href='/h/vehicles.html' class="nav-link">Vehicles</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Planet
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="planetDropdownContainer">
-                        <!-- Planet dropdown will be added here dynamically -->
-                    </div>
-                </li>
             </ul>
         </div>
+
+        <!-- Search input and button -->
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" id="searchInputNavbar" aria-label="Search">
+            <button class="btn btn-outline-success" type="button" id="searchButtonNavbar">Search</button>
+        </form>
     </div>
 </nav>
 
-<!-- Search input and button -->
-<form class="d-flex ms-auto">
-    <input class="form-control me-2" type="search" placeholder="Search" id="searchInputNavbar" aria-label="Search">
-    <button class="btn btn-outline-success" type="button" id="searchButtonNavbar">Search</button>
-</form>
+<!-- Planet Dropdown -->
+<div class="container mt-2">
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="planetDropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Planet
+        </button>
+        <div class="dropdown-menu" aria-labelledby="planetDropdownMenuButton" id="planetDropdownContainer">
+            <!-- Planet dropdown will be added here dynamically -->
+        </div>
+    </div>
 </div>
 
+<!-- Your Script -->
 <script>
     // Your script to dynamically load the planet dropdown
     fetch('/api/planets')
@@ -57,6 +71,7 @@
             select.name = 'PlanetList';
             select.className = 'form-select';
             select.addEventListener('change', () => {
+                // Handle dropdown change if needed
             });
 
             data.forEach(planet => {
@@ -71,7 +86,20 @@
         .catch(error => console.error('Error fetching planet data:', error));
 </script>
 
-<!-- GitHub logo linking to the repository -->
-<a href="https://github.com/Entropiawiki/Entropiawiki" target="_blank">
-    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo" width="40" height="40">
-</a>
+<!-- GitHub Logo -->
+<div class="container mt-2 text-end">
+    <a href="https://github.com/Entropiawiki/Entropiawiki" target="_blank">
+        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo" width="30" height="30">
+    </a>
+</div>
+
+<div class="container mt-2 text-end">
+    <a href="https://discord.gg/XSg9XspY" target="_blank">
+        <img src="https://clipartcraft.com/images/discord-logo-transparent-9.png" alt="Discord Logo" width="30" height="30">
+    </a>
+</div>
+
+<!-- Include Bootstrap JS at the end of the body -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
