@@ -1,11 +1,11 @@
 const express = require('express');
-const https = require('https');
 const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const mysql = require('mysql');
 const config = require('./s/config.js');
 const apiRoutes = require('./s/apiRoutes.js');
-const certbot = require('certbot-auto');
+const { exec } = require('child_process');
 
 const app = express();
 const port = 3000;
@@ -30,26 +30,20 @@ app.use((req, res, next) => {
 // Include your API routes
 app.use('/api', apiRoutes);
 
-// Redirect HTTP to HTTPS
-app.use((req, res, next) => {
-    if (!req.secure) {
-        return res.redirect(`https://${req.headers.host}${req.url}`);
-    }
-    next();
-});
-
 // Certbot setup
 const certbotOptions = config.certbotOptions;
+const domain = config.certbotOptions.domains[0];
+const email = config.certbotOptions.email;
 
 // Check if SSL certificate is available and within its validity period
 const checkCertificate = () => {
-    if (fs.existsSync(certbotOptions.domains[0] + '/privkey.pem')) {
-        const stats = fs.statSync(certbotOptions.domains[0] + '/privkey.pem');
+    if (fs.existsSync(`${domain}/privkey.pem`)) {
+        const stats = fs.statSync(`${domain}/privkey.pem`);
         const now = new Date().getTime();
         const certExpiry = new Date(stats.ctime).getTime() + (90 * 24 * 60 * 60 * 1000); // Assuming 90 days validity
 
         if (now < certExpiry) {
-            return true; // Certificate is available and within validity period
+            return true; // Certificate is available and within the validity period
         }
     }
     return false;
@@ -57,61 +51,62 @@ const checkCertificate = () => {
 
 // Renew SSL certificate if needed
 const renewCertificateIfNeeded = () => {
-    const stats = fs.statSync(certbotOptions.domains[0] + '/cert.pem');
+    const stats = fs.statSync(`${domain}/cert.pem`);
     const now = new Date().getTime();
     const certExpiry = new Date(stats.ctime).getTime() + (certbotOptions.renewalDays * 24 * 60 * 60 * 1000);
 
     if (now > certExpiry) {
         console.log('SSL certificate is expired or about to expire. Renewing...');
-        certbot.renew(certbotOptions, (err, certs) => {
+        exec(`sudo certbot certonly --standalone -d ${domain} --non-interactive --agree-tos -m ${email}`, (err, stdout, stderr) => {
             if (err) {
                 console.error('Error renewing Certbot:', err);
             } else {
                 console.log('SSL certificate renewed successfully');
-                startServer(certs);
+                startServer();
             }
         });
     }
 };
 
-// Run Certbot only if the SSL certificate is not available or has expired
-if (!checkCertificate()) {
-    certbot.certonly(certbotOptions, (err, certs) => {
-        if (err) {
-            console.error('Error running Certbot:', err);
-        } else {
-            console.log('SSL certificate obtained/renewed successfully');
-            startServer(certs);
-        }
-    });
+// local mode
+if (process.argv.includes('--local')) {
+    console.log('Local mode. Starting HTTP server without Certbot.');
+    startServer();
 } else {
-    console.log('SSL certificate is available and within validity period');
+    // Redirect HTTP to HTTPS
+    app.use((req, res, next) => {
+        if (!req.secure) {
+            return res.redirect(`https://${req.headers.host}${req.url}`);
+        }
+        next();
+    });
+
+    // Check and renew certificate if needed every day
+    setInterval(renewCertificateIfNeeded, 24 * 60 * 60 * 1000);
+
+    console.log('Starting HTTPS server.');
     startServer();
 }
 
-// Check and renew certificate if needed every day
-setInterval(renewCertificateIfNeeded, 24 * 60 * 60 * 1000);
+// Create server based on mode
+function startServer() {
+    if (process.argv.includes('--local')) {
+        // Run HTTP server for local mode
+        const httpServer = http.createServer(app);
+        httpServer.listen(port, () => {
+            console.log(`Server listening at http://localhost:${port}`);
+        });
+    } else {
+        // Run HTTPS server for non-local mode
+        const credentials = {
+            key: fs.readFileSync(`${domain}/privkey.pem`, 'utf8'),
+            cert: fs.readFileSync(`${domain}/cert.pem`, 'utf8'),
+            ca: fs.readFileSync(`${domain}/chain.pem`, 'utf8'),
+        };
 
-// Create HTTPS server
-function startServer(certs) {
-    const credentials = {
-        key: fs.readFileSync(certs ? certs.privkey : certbotOptions.domains[0] + '/privkey.pem', 'utf8'),
-        cert: fs.readFileSync(certs ? certs.cert : certbotOptions.domains[0] + '/cert.pem', 'utf8'),
-        ca: fs.readFileSync(certs ? certs.chain : certbotOptions.domains[0] + '/chain.pem', 'utf8'),
-    };
-
-    const httpsServer = https.createServer(credentials, app);
-    httpsServer.listen(port, () => {
-        console.log(`Server listening at https://localhost:${port}`);
-    });
+        const httpsServer = https.createServer(credentials, app);
+        httpsServer.listen(port, () => {
+            console.log(`Server listening at https://localhost:${port}`);
+        });
+    }
 }
-
-// Create HTTP server for Certbot challenges
-const httpServer = http.createServer((req, res) => {
-    certbot.middleware.httpChallenge(req, res);
-});
-
-// Listen on port 80 for Certbot challenges
-httpServer.listen(80, () => {
-    console.log('Certbot HTTP server listening on port 80');
-});
