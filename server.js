@@ -3,12 +3,12 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs').promises;
 const path = require('path');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const config = require('./s/config.js');
 const apiRoutes = require('./s/apiRoutes.js');
 
 const app = express();
-const port = 443;
+const port = 3000;
 
 const dbConnection = mysql.createConnection(config.dbConfig);
 
