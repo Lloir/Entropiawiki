@@ -157,4 +157,62 @@ router.get('/armor', (req, res) => {
     });
 });
 
+// Define the endpoint to fetch continent data
+router.get('/continents', (req, res) => {
+    console.log('Fetching continent data...');
+
+    const sqlContinents = `
+SELECT
+    PointX,
+    PointY,
+FROM wiki.continent
+WHERE Name = 'Calypso';
+    `;
+
+
+    dbConnection.query(sqlContinents, (error, results) => {
+        if (error) {
+            console.error('Error executing database query:', error.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            // Map the results to add PlanetName and MapImagePath
+            const mappedResults = results.map(result => ({
+                ...result,
+                MapImagePath: `Images/Maps/${result.Image}`,
+            }));
+
+            console.log('Continent data fetched successfully:', mappedResults);
+            res.json(mappedResults);
+        }
+    });
+});
+
+// Define the endpoint to fetch location data
+router.get('/locations', (req, res) => {
+    console.log('Fetching location data...');
+
+    const sqlLocations = `
+        SELECT
+            Continent,
+            Lon,
+            Lat,
+            Type,
+            Name,
+            Density,
+            \`Land Area\` AS LandArea,  -- Use backticks for column names with spaces
+            Distance
+        FROM wiki.location;
+    `;
+
+    dbConnection.query(sqlLocations, (error, results) => {
+        if (error) {
+            console.error('Error executing location query:', error.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            console.log('Location data fetched successfully:', results);
+            res.json(results);
+        }
+    });
+});
+
 module.exports = router;
