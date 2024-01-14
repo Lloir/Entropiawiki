@@ -1,0 +1,23 @@
+/* styles.css */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Your custom styles go here */
+
+/* Add lines between rows for all tables with the class 'dataTable' */
+.dataTable tbody tr,
+#vehicleTable tbody tr {
+    border-bottom: 1px solid #ddd; /* Add a border between rows */
+}
+
+/* Remove the border from the last row for all tables with the class 'dataTable' */
+.dataTable tbody tr:last-child,
+#vehicleTable tbody tr:last-child {
+    border-bottom: none; /* Remove the border from the last row to avoid extra lines */
+}
+
+/* Override the color property for body */
+body {
+    color: #ffffff !important;
+}

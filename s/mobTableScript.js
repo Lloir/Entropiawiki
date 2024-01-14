@@ -23,7 +23,15 @@ $(document).ready(function () {
             // Dynamically create th elements for columns
             const tableHead = $('#mobDataTable thead tr');
             columns.forEach(column => {
-                tableHead.append(`<th scope="col" class="column${column}">${column}</th>`);
+                if (column !== 'LootNames') {
+                    tableHead.append(`<th scope="col" class="column${column}">${column}</th>`);
+                } else {
+                    tableHead.append(`<th scope="col" class="column${column}">
+                        <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#lootNamesModal">
+                            Loot Names
+                        </button>
+                    </th>`);
+                }
             });
 
             // Set the flag to true
@@ -46,11 +54,27 @@ $(document).ready(function () {
             const dataTable = $('#mobDataTable').DataTable({
                 data: mobDataTable,
                 columns: Object.keys(mobDataTable[0]).map(column => {
-                    return {
-                        data: column,
-                        title: column,
-                        visible: true, // Initially set all columns to visible
-                    };
+                    if (column !== 'LootNames') {
+                        return {
+                            data: column,
+                            title: column,
+                            visible: true, // Initially set all columns to visible
+                        };
+                    } else {
+                        return {
+                            data: function (row) {
+                                return row.LootNames;
+                            },
+                            title: column,
+                            visible: true,
+                            render: function (data, type, row) {
+                                if (type === 'display') {
+                                    return `<button type="button" class="btn btn-link loot-names-btn" data-bs-toggle="modal" data-bs-target="#lootNamesModal" data-loot-names="${data}">View</button>`;
+                                }
+                                return data;
+                            }
+                        };
+                    }
                 }),
                 paging: true,
                 autoWidth: true,
@@ -70,6 +94,12 @@ $(document).ready(function () {
                 const columnClass = $(this).attr('id').replace('Checkbox', '');
                 toggleColumnVisibility(dataTable, columnClass);
             });
+
+            // Event listener for LootNames buttons to display the modal
+            $(document).on('click', '.loot-names-btn', function () {
+                const lootNames = $(this).data('loot-names');
+                displayLootNamesModal(lootNames);
+            });
         },
         error: function (error) {
             console.error('Error fetching mobDataTable:', error);
@@ -84,3 +114,19 @@ function toggleColumnVisibility(dataTable, columnClass) {
 
     dataTable.column(columnIndex).visible(!isVisible);
 }
+
+// Function to display LootNames in the modal
+function displayLootNamesModal(lootNames) {
+    const modalBody = $('#lootNamesModal .modal-body');
+    modalBody.empty();
+
+    if (lootNames) {
+        const lootNamesArray = lootNames.split(',');
+        lootNamesArray.forEach(lootName => {
+            modalBody.append(`<p>${lootName}</p>`);
+        });
+    } else {
+        modalBody.append('<p>No Loot Names found.</p>');
+    }
+}
+twElements.init();

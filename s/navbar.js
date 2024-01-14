@@ -1,4 +1,3 @@
-// includeNavbar.js
 document.addEventListener("DOMContentLoaded", function () {
     // Fetch and include the navbar
     fetch('../h/navbar.html')
@@ -29,6 +28,5 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 console.error('Search elements not found in the navbar.');
             }
-        })
-        .catch(error => console.error('Error fetching navbar:', error));
+        });
 });
