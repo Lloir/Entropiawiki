@@ -81,7 +81,6 @@ $(document).ready(function () {
                 ordering: true,
                 pagingType: "full",
                 dom: '<"top"f>rt<"bottom"lip><"clear">',
-                paging: true,
                 lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 pageLength: 20,
                 drawCallback: function (settings) {
@@ -95,11 +94,6 @@ $(document).ready(function () {
                 toggleColumnVisibility(dataTable, columnClass);
             });
 
-            // Event listener for LootNames buttons to display the modal
-            $(document).on('click', '.loot-names-btn', function () {
-                const lootNames = $(this).data('loot-names');
-                displayLootNamesModal(lootNames);
-            });
         },
         error: function (error) {
             console.error('Error fetching mobDataTable:', error);
@@ -115,18 +109,9 @@ function toggleColumnVisibility(dataTable, columnClass) {
     dataTable.column(columnIndex).visible(!isVisible);
 }
 
-// Function to display LootNames in the modal
-function displayLootNamesModal(lootNames) {
-    const modalBody = $('#lootNamesModal .modal-body');
-    modalBody.empty();
-
-    if (lootNames) {
-        const lootNamesArray = lootNames.split(',');
-        lootNamesArray.forEach(lootName => {
-            modalBody.append(`<p>${lootName}</p>`);
-        });
-    } else {
-        modalBody.append('<p>No Loot Names found.</p>');
-    }
-}
-twElements.init();
+// Handle row click event to populate the modal content
+$('#mobTable tbody').on('click', 'tr', function () {
+    const data = dataTable.row(this).data();
+    const lootContent = data.LootNames.length ? data.LootNames.join('<br>') : 'No drops';
+    $('#expandModalBody').html(lootContent);
+});

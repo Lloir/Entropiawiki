@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }).setView([0, 0], 0);
 
         // Add a tile layer with the Calypso image
-        const imageLayer = L.imageOverlay('../IImages/Maps/Calypso.png', bounds).addTo(map);
+        const imageLayer = L.imageOverlay('../Images/Maps/Calypso.png', bounds).addTo(map);
 
         // Create a layer group for the markers
         markerGroup = L.layerGroup().addTo(map);
