@@ -1,9 +1,11 @@
 module.exports = {
-  purge: [
+  content: [
     './css/**/*.css',
     './h/**/*.html',
     './s/**/*.js',
     '.index.html',
+    "./node_modules/tw-elements/dist/js//*.js",
+
   ],
   theme: {
     extend: {},
@@ -22,8 +24,4 @@ module.exports = {
     logs: true,
     themeRoot: ":root",
   },
-  content: [
-    "./src//*.{html,js}",
-    "./node_modules/tw-elements/dist/js//*.js",
-  ],
 };
