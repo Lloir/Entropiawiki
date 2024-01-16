@@ -1,57 +1,55 @@
 $(document).ready(function () {
-    // Flag to check if elements are already created
-    let elementsCreated = false;
-
-    // Function to create checkboxes and th elements
-    function createElementsOnce(mobDataTable) {
-        if (!elementsCreated) {
-            // Extract column names from the first table object
-            const columns = Object.keys(mobDataTable[0]);
-
-            // Dynamically create checkboxes for column visibility
-            const checkboxContainer = $('#checkboxContainer');
-            columns.forEach(column => {
-                const checkboxId = `column${column}Checkbox`;
-                checkboxContainer.append(`
-                    <div class="form-check form-check-inline">
-                        <input type="checkbox" class="form-check-input" id="${checkboxId}" checked>
-                        <label class="form-check-label" for="${checkboxId}">${column}</label>
-                    </div>
-                `);
-            });
-
-            // Dynamically create th elements for columns
-            const tableHead = $('#mobDataTable thead tr');
-            columns.forEach(column => {
-                tableHead.append(`<th scope="col" class="column${column}">${column}</th>`);
-            });
-
-            // Set the flag to true
-            elementsCreated = true;
-        }
+    // Destroy existing DataTable if it exists
+    if ($.fn.DataTable.isDataTable('#mobTable')) {
+        $('#mobTable').DataTable().destroy();
     }
 
-    // Fetch table data from the server and dynamically create checkboxes and columns
+    // Fetch all data from the server
     $.ajax({
         url: '/api/allData',
         method: 'GET',
         dataType: 'json',
-        success: function (mobDataTable) {
-            console.log('Fetched mobDataTable:', mobDataTable);
+        success: function (allData) {
+            console.log('Fetched all data:', allData);
 
-            // Call the function to create elements once
-            createElementsOnce(mobDataTable);
+            // Group loot drops by mob name (case-insensitive)
+            const mobDataGrouped = {};
 
-            // Initialize DataTable with dynamically created columns
-            const dataTable = $('#mobDataTable').DataTable({
-                data: mobDataTable,
-                columns: Object.keys(mobDataTable[0]).map(column => {
-                    return {
-                        data: column,
-                        title: column,
-                        visible: true, // Initially set all columns to visible
+            allData.forEach(item => {
+                const mobNameKey = item.MobName.toLowerCase();
+
+                if (!mobDataGrouped[mobNameKey]) {
+                    mobDataGrouped[mobNameKey] = {
+                        ID: item.ID,
+                        MobName: item.MobName,
+                        PlanetName: item.PlanetName,
+                        LootNames: [],
                     };
-                }),
+                }
+
+                if (item.LootNames && item.LootNames.length > 0) {
+                    mobDataGrouped[mobNameKey].LootNames.push(...item.LootNames.split(','));
+                }
+            });
+
+            // Convert the grouped data to an array
+            const mobData = Object.values(mobDataGrouped);
+
+            console.log('Processed mobData:', mobData);
+
+            // Initialize DataTable with the combined data
+            const dataTable = $('#mobTable').DataTable({
+                data: mobData,
+                columns: [
+                    { data: 'MobName' },
+                    { data: 'PlanetName' },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<a href="#" class="view-link">View Drops</a>';
+                        }
+                    }
+                ],
                 paging: true,
                 autoWidth: true,
                 ordering: true,
@@ -60,27 +58,33 @@ $(document).ready(function () {
                 paging: true,
                 lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 pageLength: 20,
-                drawCallback: function (settings) {
-                    console.log('Rendered DataTable HTML:', $('#mobDataTable').html());
-                }
             });
 
-            // Event listener for checkboxes to toggle column visibility
-            $(document).on('change', 'input[type="checkbox"]', function () {
-                const columnClass = $(this).attr('id').replace('Checkbox', '');
-                toggleColumnVisibility(dataTable, columnClass);
+            // Handle row click event to populate the modal content
+            $('#mobTable tbody').on('click', 'tr', function () {
+                const data = dataTable.row(this).data();
+                const lootContent = data.LootNames.length ? data.LootNames.join('<br>') : 'No drops';
+                $('#expandModalBody').html(lootContent);
+
+                // Show the modal
+                my_modal_2.showModal();
+            });
+
+            // Handle link click event to open modal
+            $('#mobTable tbody').on('click', 'td a.view-link', function (e) {
+                e.preventDefault();
+                const data = dataTable.row($(this).closest('tr')).data();
+                const lootContent = data.LootNames.length ? data.LootNames.join('<br>') : 'No drops';
+
+                // Update the modal content
+                $('#expandModalBody').html(lootContent);
+
+                // Show the modal
+                my_modal_2.showModal();
             });
         },
         error: function (error) {
-            console.error('Error fetching mobDataTable:', error);
+            console.error('Error fetching all data:', error);
         }
     });
 });
-
-// Function to toggle column visibility
-function toggleColumnVisibility(dataTable, columnClass) {
-    const columnIndex = dataTable.column(`.${columnClass}`).index();
-    const isVisible = dataTable.column(columnIndex).visible();
-
-    dataTable.column(columnIndex).visible(!isVisible);
-}

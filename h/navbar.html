@@ -1,108 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="synthwave">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/mdb.dark.min.css">
-
 </head>
-<body>
+
+<body class="bg-gray-100 dark:bg-black">
 
 <!-- Banner for Testing and Updates -->
-<div class="container-fluid bg-warning text-dark text-center p-2">
+<div class="bg-warning text-dark text-center p-4">
     <strong>This website is still in testing and being updated often. Thank you for your understanding!</strong>
 </div>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="https://entropiawiki.co.uk">
-            <img src="/Images/logo.png" alt="Your Logo" height="140">
+<nav class="bg-gray-800 text-white">
+    <div class="container mx-auto flex justify-between items-center py-2"> <!-- Adjusted py-4 to py-2 -->
+        <a href="https://entropiawiki.co.uk" class="flex-shrink-0">
+            <img src="/Images/logo.png" alt="Your Logo" class="h-8"> <!-- Adjusted h-10 to h-8 -->
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href='/h/armor.html' class="nav-link">Armor</a>
-                </li>
-                <li class="nav-item">
-                    <a href='/h/creatures.html' class="nav-link">Creatures</a>
-                </li>
-                <li class="nav-item">
-                    <a href='/h/socs.html' class="nav-link">Societies</a>
-                </li>
-                <li class="nav-item">
-                    <a href='/h/vehicles.html' class="nav-link">Vehicles</a>
-                </li>
-                <li class="nav-item">
-                    <a href='/h/maps.html' class="nav-link">Maps</a>
-                </li>
-            </ul>
+        <div class="flex space-x-2"> <!-- Adjusted space-x-4 to space-x-2 -->
+            <a href='/h/armor.html' class="btn text-sm">Armor</a> <!-- Adjusted text-base to text-sm -->
+            <a href='/h/creatures.html' class="btn text-sm">Creatures</a> <!-- Adjusted text-base to text-sm -->
+            <a href='/h/socs.html' class="btn text-sm">Societies</a> <!-- Adjusted text-base to text-sm -->
+            <a href='/h/vehicles.html' class="btn text-sm">Vehicles</a> <!-- Adjusted text-base to text-sm -->
+            <a href='/h/maps.html' class="btn text-sm">Maps</a> <!-- Adjusted text-base to text-sm -->
+            <a href='/h/other-sites.html' class="btn text-sm">Other Sites</a> <!-- Adjusted text-base to text-sm -->
         </div>
-
-        <!-- Search input and button -->
-        <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" id="searchInputNavbar" aria-label="Search">
-            <button class="btn btn-outline-success" type="button" id="searchButtonNavbar">Search</button>
+        <form class="flex items-center">
+            <input class="form-input me-2 text-sm" type="search" placeholder="Search" id="searchInputNavbar" aria-label="Search"> <!-- Adjusted text-base to text-sm -->
+            <button class="btn btn-success text-sm" type="button" id="searchButtonNavbar">Search</button> <!-- Adjusted text-base to text-sm -->
         </form>
     </div>
 </nav>
 
-<!-- Planet Dropdown -->
-<div class="container mt-2">
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="planetDropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Planet
-        </button>
-        <div class="dropdown-menu" aria-labelledby="planetDropdownMenuButton" id="planetDropdownContainer">
-            <!-- Planet dropdown will be added here dynamically -->
-        </div>
-    </div>
-</div>
-
-<!-- Your Script -->
-<script>
-    // Your script to dynamically load the planet dropdown
-    fetch('/api/planets')
-        .then(response => response.json())
-        .then(data => {
-            const planetDropdownContainer = document.getElementById('planetDropdownContainer');
-            const select = document.createElement('select');
-            select.name = 'PlanetList';
-            select.className = 'form-select';
-            select.addEventListener('change', () => {
-                // Handle dropdown change if needed
-            });
-
-            data.forEach(planet => {
-                const option = document.createElement('option');
-                option.value = planet.ID;
-                option.text = planet.Name;
-                select.appendChild(option);
-            });
-
-            planetDropdownContainer.appendChild(select);
-        })
-        .catch(error => console.error('Error fetching planet data:', error));
-</script>
-
-<!-- GitHub Logo -->
-<div class="container mt-2 text-end">
-    <a href="https://github.com/Entropiawiki/Entropiawiki" target="_blank">
-        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo" width="30" height="30">
-    </a>
-</div>
-
-<div class="container mt-2 text-end">
-    <a href="https://discord.gg/XSg9XspY" target="_blank">
-        <img src="https://clipartcraft.com/images/discord-logo-transparent-9.png" alt="Discord Logo" width="30" height="30">
-    </a>
-</div>
-
-<!-- Include Bootstrap JS at the end of the body -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

@@ -1,68 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:x-transition="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
-    <title>Your Page Title</title>
+    <link rel="stylesheet" href="../css/output.css" type="text/css" />
+    <link rel="stylesheet" href="../public/build/tailwind.css" type="text/css">
+    <!-- Add DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" type="text/css">
+
     <style>
-        .truncated-list {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 150px;
-            cursor: pointer;
-            color: #007bff;
-            text-decoration: underline;
+        /* Add the following style to hide the "open modal" button */
+        .btn {
+            display: none;
         }
     </style>
+
+    <title>Mobs</title>
 </head>
 
 <body>
+<!-- Container for including the navbar -->
 <div id="navbarContainer"></div>
 
 <div class="container mt-5">
-    <h2>Your Table Title</h2>
+    <h2>Mob Table</h2>
 
-    <div id="checkboxContainer" class="form-check form-check-inline">
-        <!-- Dynamically populate checkboxes here using JavaScript -->
-    </div>
-
-    <table id="mobDataTable" class="table table-dark table-striped">
+    <!-- Table to display mob data -->
+    <table id="mobTable" class="table table-dark table-striped">
         <thead>
         <tr>
-            <!-- Dynamically populate th elements for columns here using JavaScript -->
+            <th scope="col">Name</th>
+            <th scope="col">Location</th>
+            <th scope="col">Drops</th>
         </tr>
         </thead>
         <tbody>
-        <!-- Data will be dynamically populated here -->
+        <!-- Placeholder row, you may remove this or replace it with actual data -->
+        <tr class="table-dark">
+            <th scope="row">Dark</th>
+            <td>Location</td>
+            <td class="drops"> <!-- Add class "drops" to the drops column -->
+                <a href="#" class="view-link">View Drops</a> <!-- Add a link to trigger the modal -->
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Include necessary scripts -->
+<script src="../node_modules/tw-elements/dist/js/tw-elements.umd.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="../s/navbar.js"></script>
+<script src="../s/mobTableScript.js"></script>
 
-<script src="/s/navbar.js"></script>
-<script src="/s/mobTableScript.js"></script>
-
-<div class="modal fade" id="expandModal" tabindex="-1" aria-labelledby="expandModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="expandModalLabel">Expanded List</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="expandModalBody">
-                <!-- Content dynamically populated -->
-            </div>
-        </div>
+<button class="btn" onclick="my_modal_2.showModal()">open modal</button>
+<dialog id="my_modal_2" class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">Loot!!!!!</h3>
+        <p class="py-4">Press ESC key or click close</p>
+        <div id="expandModalBody"></div>
     </div>
-</div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
 </body>
 
 </html>
