@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:x-transition="http://www.w3.org/1999/xhtml">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -9,54 +9,39 @@
     <link rel="stylesheet" href="../public/build/tailwind.css" type="text/css">
     <!-- Add DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" type="text/css">
-
-    <style>
-        /* Add the following style to hide the "open modal" button */
-        .btn {
-            display: none;
-        }
-    </style>
-
-    <title>Mobs</title>
+    <title>Creatures</title>
 </head>
 
 <body>
+
 <!-- Container for including the navbar -->
 <div id="navbarContainer"></div>
 
-<div class="container mt-5">
-    <h2>Mob Table</h2>
+<div class="container mt-5 mx-auto">
+    <h2 class="text-2xl font-bold mb-4">Mob Data</h2>
+
+    <div id="checkboxContainer" class="flex flex-wrap space-x-4 mb-15">
+        <!-- Dynamically populate checkboxes here using JavaScript -->
+    </div>
 
     <!-- Table to display mob data -->
-    <table id="mobTable" class="table table-dark table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Location</th>
-            <th scope="col">Drops</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Placeholder row, you may remove this or replace it with actual data -->
-        <tr class="table-dark">
-            <th scope="row">Dark</th>
-            <td>Location</td>
-            <td class="drops"> <!-- Add class "drops" to the drops column -->
-                <a href="#" class="view-link">View Drops</a> <!-- Add a link to trigger the modal -->
-            </td>
-        </tr>
-        </tbody>
+    <table id="mobTable" class="table-auto w-full border border-collapse border-gray-800">
+        <thead class="bg-gray-800 text-white">
+        <!-- Table content... -->
     </table>
+
+    <!-- Include necessary scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="../node_modules/tw-elements/dist/js/tw-elements.umd.min.js"></script>
+
+
+    <script src="../s/navbar.js"></script>
+    <script src="../s/creaturestable.js"></script>
 </div>
 
-<!-- Include necessary scripts -->
-<script src="../node_modules/tw-elements/dist/js/tw-elements.umd.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="../s/navbar.js"></script>
-<script src="../s/mobTableScript.js"></script>
+<button class="btn" onclick="my_modal_2.showModal()">Open Modal</button>
 
-<button class="btn" onclick="my_modal_2.showModal()">open modal</button>
 <dialog id="my_modal_2" class="modal">
     <div class="modal-box">
         <h3 class="font-bold text-lg">Loot!!!!!</h3>
@@ -67,6 +52,7 @@
         <button>close</button>
     </form>
 </dialog>
+
 </body>
 
 </html>

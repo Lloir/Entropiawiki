@@ -6,7 +6,7 @@ $(document).ready(function () {
 
     // Fetch all data from the server
     $.ajax({
-        url: '/api/allData',
+        url: '/api/mobs',
         method: 'GET',
         dataType: 'json',
         success: function (allData) {
@@ -20,9 +20,27 @@ $(document).ready(function () {
 
                 if (!mobDataGrouped[mobNameKey]) {
                     mobDataGrouped[mobNameKey] = {
-                        ID: item.ID,
                         MobName: item.MobName,
                         PlanetName: item.PlanetName,
+                        Stab: item.Stab,
+                        Cut: item.Cut,
+                        Impact: item.Impact,
+                        Penetration: item.Penetration,
+                        Shrapnel: item.Shrapnel,
+                        Burn: item.Burn,
+                        Cold: item.Cold,
+                        Acid: item.Acid,
+                        Electric: item.Electric,
+                        Speed: item.Speed,
+                        Combat: item.Combat,
+                        Movement: item.Movement,
+                        Attacks: item.Attacks,
+                        Range: item.Range,
+                        Aggression: item.Aggression,
+                        MinHP: item.MinHP,
+                        MinGlobal: item.MinGlobal,
+                        Tamable: item.Tamable,
+                        Sweatable: item.Sweatable,
                         LootNames: [],
                     };
                 }
@@ -41,21 +59,42 @@ $(document).ready(function () {
             const dataTable = $('#mobTable').DataTable({
                 data: mobData,
                 columns: [
-                    { data: 'MobName' },
-                    { data: 'PlanetName' },
+                    { data: 'MobName', title: 'Mob Name' },
+                    { data: 'PlanetName', title: 'Planet Name' },
+                    { data: 'Stab', title: 'Stab' },
+                    { data: 'Cut', title: 'Cut' },
+                    { data: 'Impact', title: 'Impact' },
+                    { data: 'Penetration', title: 'Penetration' },
+                    { data: 'Shrapnel', title: 'Shrapnel' },
+                    { data: 'Burn', title: 'Burn' },
+                    { data: 'Cold', title: 'Cold' },
+                    { data: 'Acid', title: 'Acid' },
+                    { data: 'Electric', title: 'Electric' },
+                    { data: 'Speed', title: 'Speed' },
+                    { data: 'Combat', title: 'Combat' },
+                    { data: 'Movement', title: 'Movement' },
+                    { data: 'Attacks', title: 'Attacks' },
+                    { data: 'Range', title: 'Range' },
+                    { data: 'Aggression', title: 'Aggression' },
+                    { data: 'MinHP', title: 'Min HP' },
+                    { data: 'MinGlobal', title: 'Min Global' },
+                    { data: 'Tamable', title: 'Tamable' },
+                    { data: 'Sweatable', title: 'Sweatable' },
                     {
                         data: null,
+                        title: 'View Drops',
                         render: function (data, type, row) {
                             return '<a href="#" class="view-link">View Drops</a>';
                         }
                     }
                 ],
                 paging: true,
-                autoWidth: true,
+                scrollCollapse: true,
+                scrollY: '50vh',
+                autoWidth: false,
                 ordering: true,
                 pagingType: "full",
                 dom: '<"top"f>rt<"bottom"lip><"clear">',
-                paging: true,
                 lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 pageLength: 20,
             });
@@ -81,6 +120,20 @@ $(document).ready(function () {
 
                 // Show the modal
                 my_modal_2.showModal();
+            });
+
+            // Add checkboxes for column visibility
+            $('#checkboxContainer').html('<label class="checkbox-label">Toggle Columns:</label>');
+            dataTable.columns().every(function () {
+                const column = this;
+                const columnIndex = column.index();
+                $('#checkboxContainer').append('<input type="checkbox" checked data-column="' + columnIndex + '">' + column.header().innerHTML);
+            });
+
+            // Handle checkbox change event
+            $('#checkboxContainer input[type="checkbox"]').on('change', function () {
+                const columnIndex = $(this).data('column');
+                dataTable.column(columnIndex).visible(!dataTable.column(columnIndex).visible());
             });
         },
         error: function (error) {
