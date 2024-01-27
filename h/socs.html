@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="synthwave">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../public/build/tailwind.css">
     <title>Society Table</title>
+
+    <link rel="stylesheet" href="../css/styles.css" type="text/css" />
+    <link rel="stylesheet" href="../css/output.css" type="text/css" />
+    <link rel="stylesheet" href="../public/build/tailwind.css" type="text/css">
+    <!-- Add DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" type="text/css">
 </head>
 
-<body class="bg-gray-100 dark:bg-black">
+<body>
 
 <!-- Container for including the navbar -->
 <div id="navbarContainer"></div>
@@ -33,9 +38,9 @@
 </div>
 
 <script src="/s/navbar.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="../node_modules/tw-elements/dist/js/tw-elements.umd.min.js"></script>
 
 <script>
     $(document).ready(function () {

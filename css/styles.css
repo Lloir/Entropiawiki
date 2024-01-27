@@ -2,3 +2,8 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.checkbox-wrapper {
+    margin-right: 10px; /* Adjust the margin as needed to control spacing between checkboxes */
+    white-space: nowrap; /* Prevent checkboxes from wrapping to the next line */
+}

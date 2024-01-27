@@ -24,6 +24,79 @@ router.get('/planets', (req, res) => {
 router.get('/mobs', (req, res) => {
     console.log('Fetching mob data with loot...');
     const sql = `
+        SELECT
+            mob.ID,
+            mob.Name AS MobName,
+            mob.Stab,
+            mob.Cut,
+            mob.Impact,
+            mob.Penetration,
+            mob.Shrapnel,
+            mob.Burn,
+            mob.Cold,
+            mob.Acid,
+            mob.Electric,
+            mob.Speed,
+            mob.Combat,
+            mob.Movement,
+            mob.ClassID,
+            mob.ImageID,
+            mob.Visible,
+            mob.Tamable,
+            mob.Sweatable,
+            mob.ActivityID,
+            mob.ScanActID,
+            mob.Attacks,
+            mob.Range,
+            mob.Aggression,
+            mob.PlanetID,
+            mob.MinHP,
+            mob.MinGlobal,
+            planet.Name AS PlanetName,
+            GROUP_CONCAT(loot.drop_name) AS LootNames
+        FROM wiki.mob AS mob
+        LEFT JOIN wiki.planet AS planet ON mob.PlanetID = planet.ID
+        LEFT JOIN wiki.loot AS loot ON mob.ID = loot.MobID
+        GROUP BY mob.ID;
+    `;
+    dbConnection.query(sql, (error, results) => {
+        if (error) {
+            console.error('Error executing database query:', error.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            console.log('Mob data with loot fetched successfully:', results);
+            res.json(results);
+        }
+    });
+});
+
+// Define the endpoint to fetch mob data with planet information
+router.get('/mobs/planet', (req, res) => {
+    console.log('Fetching mob data with planet information...');
+    const sql = `
+        SELECT
+            mob.ID,
+            mob.Name AS MobName,
+            mob.PlanetID,
+            planet.Name AS PlanetName
+        FROM wiki.mob AS mob
+        LEFT JOIN wiki.planet AS planet ON mob.PlanetID = planet.ID;
+    `;
+    dbConnection.query(sql, (error, results) => {
+        if (error) {
+            console.error('Error executing database query:', error.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            console.log('Mob data with planet information fetched successfully:', results);
+            res.json(results);
+        }
+    });
+});
+
+// Define the endpoint to fetch mob data with loot
+router.get('/mobs', (req, res) => {
+    console.log('Fetching mob data with loot...');
+    const sql = `
         SELECT mob.ID, mob.Name AS MobName, 
                CAST(mob.PlanetID AS SIGNED) AS PlanetID, 
                planet.Name AS PlanetName, 

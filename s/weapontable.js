@@ -1,43 +1,42 @@
 $(document).ready(function () {
-    // Flag to check if elements are already created
     let elementsCreated = false;
 
-    // Function to create checkboxes and th elements
     function createElementsOnce(weaponData) {
         if (!elementsCreated) {
-            // Extract column names from the first armor object
             const columns = Object.keys(weaponData[0]);
+            const excludedColumns = ['ID', 'Visible', 'ImageID'];
 
-            // Dynamically create checkboxes for column visibility
-            const checkboxContainer = $('#checkboxContainer');
-            columns.forEach(column => {
-                // Exclude ID, Visible, and ImageID from being displayed and have filters
-                if (column !== 'ID' && column !== 'Visible' && column !== 'ImageID') {
-                    const checkboxId = `column${column}Checkbox`;
-                    checkboxContainer.append(`
-                        <div class="form-check form-check-inline">
-                            <input type="checkbox" class="form-check-input" id="${checkboxId}" checked>
-                            <label class="form-check-label" for="${checkboxId}">${column}</label>
-                        </div>
-                    `);
-                }
-            });
+            createCheckboxes(columns, excludedColumns);
+            createTableHeaders(columns, excludedColumns);
 
-            // Dynamically create th elements for columns
-            const tableHead = $('#yourTable thead tr');
-            columns.forEach(column => {
-                // Exclude ID, Visible, and ImageID from being displayed and have filters
-                if (column !== 'ID' && column !== 'Visible' && column !== 'ImageID') {
-                    tableHead.append(`<th scope="col" class="column${column}">${column}</th>`);
-                }
-            });
-
-            // Set the flag to true
             elementsCreated = true;
         }
     }
 
-    // Fetch armor data from the server and dynamically create checkboxes and columns
+    function createCheckboxes(columns, excludedColumns) {
+        const checkboxContainer = $('#checkboxContainer');
+        columns.forEach(column => {
+            if (!excludedColumns.includes(column)) {
+                const checkboxId = `column${column}Checkbox`;
+                checkboxContainer.append(`
+                    <div class="form-check form-check-inline checkbox-wrapper"> 
+                        <input type="checkbox" class="form-check-input" id="${checkboxId}" checked>
+                        <label class="form-check-label" for="${checkboxId}">${column}</label>
+                    </div>
+                `);
+            }
+        });
+    }
+
+    function createTableHeaders(columns, excludedColumns) {
+        const tableHead = $('#yourTable thead tr');
+        columns.forEach(column => {
+            if (!excludedColumns.includes(column)) {
+                tableHead.append(`<th scope="col" class="column${column}">${column}</th>`);
+            }
+        });
+    }
+
     $.ajax({
         url: '/api/weapon',
         method: 'GET',
@@ -45,56 +44,61 @@ $(document).ready(function () {
         success: function (weaponData) {
             console.log('Fetched armor data:', weaponData);
 
-            // Call the function to create elements once
             createElementsOnce(weaponData);
 
-            // Initialize DataTable with dynamically created columns
-            const dataTable = $('#weaponTable').DataTable({
-                data: weaponData,
-                columns: Object.keys(weaponData[0]).map(column => {
-                    // Exclude ID, Visible, and ImageID from being displayed and have filters
-                    if (column !== 'ID' && column !== 'Visible' && column !== 'ImageID') {
-                        return {
-                            data: column,
-                            title: column,
-                            visible: true, // Initially set all columns to visible
-                        };
-                    } else {
-                        return {
-                            data: column,
-                            visible: false, // Exclude these columns by default
-                        };
-                    }
-                }),
-                paging: true,
-                autoWidth: true,
-                ordering: true,
-                pagingType: "full",
-                dom: '<"top"f>rt<"bottom"lip><"clear">',
-                paging: true,
-                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                pageLength: 20,
-                drawCallback: function (settings) {
-                    console.log('Rendered DataTable HTML:', $('#yourTable').html());
-                }
-            });
+            const dataTable = initializeDataTable(weaponData);
 
-            // Event listener for checkboxes to toggle column visibility
             $(document).on('change', 'input[type="checkbox"]', function () {
                 const columnClass = $(this).attr('id').replace('Checkbox', '');
                 toggleColumnVisibility(dataTable, columnClass);
             });
         },
         error: function (error) {
-            console.error('Error fetching armor data:', error);
+            console.error('Error fetching Weapon data:', error);
         }
     });
+
+    function initializeDataTable(weaponData) {
+        const excludedColumns = ['ID', 'Visible', 'ImageID'];
+        const columns = Object.keys(weaponData[0]).map(column => ({
+            data: column,
+            title: column,
+            visible: !excludedColumns.includes(column)
+        }));
+
+        const dataTable = $('#weaponTable').DataTable({
+            data: weaponData,
+            columns: columns,
+            paging: true,
+            scrollCollapse: true,
+            scrollY: '50vh',
+            autoWidth: false,
+            ordering: true,
+            pagingType: "full",
+            dom: '<"top"f>rt<"bottom"lip><"clear">',
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            pageLength: 20,
+            drawCallback: function (settings) {
+                console.log('Rendered DataTable HTML:', $('#weaponTable').html());
+            }
+        });
+
+        addCheckboxEventListener(dataTable);
+
+        return dataTable;
+    }
+
+    function addCheckboxEventListener(dataTable) {
+        $(document).on('change', 'input[type="checkbox"]', function () {
+            const columnClass = $(this).attr('id').replace('Checkbox', '');
+            toggleColumnVisibility(dataTable, columnClass);
+        });
+    }
+
+    function toggleColumnVisibility(dataTable, columnClass) {
+        const columnIndex = dataTable.column(`.${columnClass}`).index();
+        const isVisible = dataTable.column(columnIndex).visible();
+
+        dataTable.column(columnIndex).visible(!isVisible);
+    }
 });
-
-// Function to toggle column visibility
-function toggleColumnVisibility(dataTable, columnClass) {
-    const columnIndex = dataTable.column(`.${columnClass}`).index();
-    const isVisible = dataTable.column(columnIndex).visible();
-
-    dataTable.column(columnIndex).visible(!isVisible);
-}

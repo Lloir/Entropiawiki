@@ -4,23 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../public/build/tailwind.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.tailwindcss.min.css">
     <title>Weapons</title>
+
+    <link rel="stylesheet" href="../css/output.css" type="text/css" />
+    <link rel="stylesheet" href="../public/build/tailwind.css" type="text/css">
+    <!-- Add DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" type="text/css">
+
+    <style>
+        .checkbox-wrapper {
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 dark:bg-black">
+
+<body>
 
 <div id="navbarContainer"></div>
 
 <div class="container mt-5 mx-auto">
     <h2 class="text-2xl font-bold mb-4"></h2>
 
-    <div id="checkboxContainer" class="flex space-x-4 mb-4">
+    <div id="checkboxContainer" class="flex flex-wrap space-x-4 mb-4">
         <!-- Dynamically populate checkboxes here using JavaScript -->
     </div>
 
-    <table id="weaponTable" class="table table-dark table-striped">
-        <thead class="table-dark">
+    <table id="weaponTable" class="display" style="width:100%">
+        <thead>
         <tr>
             <!-- Dynamically populate th elements for columns here using JavaScript -->
         </tr>
@@ -31,10 +42,10 @@
     </table>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
+<script src="../node_modules/tw-elements/dist/js/tw-elements.umd.min.js"></script>
 <script src="../s/navbar.js"></script>
 <script src="../s/weapontable.js"></script>
 
