@@ -215,4 +215,67 @@ router.get('/locations', (req, res) => {
     });
 });
 
+router.get('/weapon', (req, res) => {
+    console.log('Fetching armor data...');
+    const sql = `
+SELECT \`weapon\`.\`ID\`,
+    \`weapon\`.\`Name\`,
+    \`weapon\`.\`Damage\`,
+    \`weapon\`.\`Range\`,
+    \`weapon\`.\`Reload_\`,
+    \`weapon\`.\`Ammo\`,
+    \`weapon\`.\`Decay\`,
+    \`weapon\`.\`Producer\`,
+    \`weapon\`.\`Price\`,
+    \`weapon\`.\`Type_\`,
+    \`weapon\`.\`Stab\`,
+    \`weapon\`.\`Cut\`,
+    \`weapon\`.\`Impact\`,
+    \`weapon\`.\`Penetration\`,
+    \`weapon\`.\`Shrapnel\`,
+    \`weapon\`.\`Burn\`,
+    \`weapon\`.\`Cold\`,
+    \`weapon\`.\`Acid\`,
+    \`weapon\`.\`Electric\`,
+    \`weapon\`.\`Crafted\`,
+    \`weapon\`.\`NamePart\`,
+    \`weapon\`.\`Attacks\`,
+    \`weapon\`.\`Source\`,
+    \`weapon\`.\`LPSB_\`,
+    \`weapon\`.\`Level\`,
+    \`weapon\`.\`Class\`,
+    \`weapon\`.\`Amplifier\`,
+    \`weapon\`.\`AmmoID\`,
+    \`weapon\`.\`HitActivityID\`,
+    \`weapon\`.\`Type\`,
+    \`weapon\`.\`Weight\`,
+    \`weapon\`.\`DmgActivityID\`,
+    \`weapon\`.\`HitReq\`,
+    \`weapon\`.\`DmgReq\`,
+    \`weapon\`.\`MaxedHit\`,
+    \`weapon\`.\`MaxedDamage\`,
+    \`weapon\`.\`MinTT\`,
+    \`weapon\`.\`DiscVU\`,
+    \`weapon\`.\`Confirmed\`,
+    \`weapon\`.\`Concentration\`,
+    \`weapon\`.\`ImpactRadius\`,
+    \`weapon\`.\`Cooldown\`,
+    \`weapon\`.\`CooldownGroup\`,
+    \`weapon\`.\`SIBID\`,
+    \`weapon\`.\`Personaleffects\`,
+    \`weapon\`.\`Efficiency\`
+FROM \`wiki\`.\`weapon\`;
+    `;
+
+    dbConnection.query(sql, (error, results) => {
+        if (error) {
+            console.error('Error executing database query:', error.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            console.log('Armor data fetched successfully:', results);
+            res.json(results);
+        }
+    });
+});
+
 module.exports = router;
