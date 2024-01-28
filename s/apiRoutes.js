@@ -1,10 +1,19 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const mysql = require('mysql2');
-const config = require('./config.js'); // Adjust the path based on your project structure
+const config = require('./config.js');
 
 const router = express.Router();
 const dbConnection = mysql.createConnection(config.dbConfig);
 
+// Configure rate limiting (e.g., 100 requests per 15 minutes)
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+});
+
+// Apply rate limiting to all routes in the router
+router.use(limiter);
 // Define the endpoint to fetch planet data
 router.get('/planets', (req, res) => {
     console.log('Fetching planet data...');
