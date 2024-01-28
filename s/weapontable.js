@@ -72,6 +72,7 @@ $(document).ready(function () {
             paging: true,
             scrollCollapse: true,
             scrollY: '50vh',
+            scrollX: true,
             autoWidth: false,
             ordering: true,
             pagingType: "full",

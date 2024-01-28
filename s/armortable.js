@@ -72,6 +72,7 @@ function initializeDataTable(armorData) {
 
     return $('#yourTable').DataTable({
         data: armorData,
+        responsive: true,
         columns: columns,
         paging: true,
         scrollCollapse: true,
