@@ -23,29 +23,7 @@
     <!-- Add DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" type="text/css">
 
-    <!-- Add your custom CSS for light and dark mode here -->
-    <style>
-        body.light-mode {
-            background-color: #f8f9fa; /* Light mode background color */
-            color: black; /* Light mode text color */
-        }
-
-        body.dark-mode {
-            background-color: #343a40; /* Dark mode background color */
-            color: white; /* Dark mode text color */
-        }
-
-        /* Add more specific styles for DataTables here */
-        .table-dark-mode th,
-        .table-dark-mode td {
-            border-color: white;
-        }
-
-        /* Add more styles as needed */
-    </style>
 </head>
-
-<body class="bg-light">
 
 <!-- Bootstrap 5 Responsive Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -53,8 +31,7 @@
         <a class="navbar-brand" href="#">
             <img src="/Images/logo.png" alt="EntropiaWiki.co.uk Logo" style="height: 80px;">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="true" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -83,15 +60,18 @@
             </ul>
         </div>
     </div>
+    <button id="darkModeToggle" type="button" class="btn btn-outline-primary" >
+        <img id="darkIcon" src="https://icons.getbootstrap.com/assets/icons/lightbulb.svg" alt="Dark Mode Icon">
+        <img id="lightIcon" src="https://icons.getbootstrap.com/assets/icons/lightbulb-fill.svg" alt="Light Mode Icon" style="display: none;">
+    </button>
+
 </nav>
 
-<!-- Container for including the navbar -->
-<div id="navbarContainer"></div>
 
 <!-- Table to display vehicle data -->
 <table id="vehicleTable" class="table-auto w-full border border-collapse border-gray-800">
 
-    <thead class="bg-gray-800 text-white">
+    <thead class="bg-gray-800">
     <tr>
         <th class="px-4 py-2">Name</th>
         <th class="px-4 py-2">Type</th>
@@ -111,6 +91,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/fc-4.3.0/fh-3.4.0/r-2.5.0/rg-1.4.1/rr-1.4.1/sb-1.6.0/datatables.min.js"></script>
 <script src="../s/vehicleTableScript.js"></script>
+<script src="../s/darkmode.js"></script>
 
 </body>
 

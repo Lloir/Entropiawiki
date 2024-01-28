@@ -40,3 +40,19 @@ body.dark-mode .navbar-nav .nav-link {
 body.dark-mode .navbar-toggler-icon {
     background-color: white; /* Dark mode navbar toggle button icon color */
 }
+
+ body.light-mode {
+     background-color: #f8f9fa; /* Light mode background color */
+     color: black; /* Light mode text color */
+ }
+
+body.dark-mode {
+    background-color: #343a40; /* Dark mode background color */
+    color: white; /* Dark mode text color */
+}
+
+/* Add more specific styles for DataTables here */
+.table-dark-mode th,
+.table-dark-mode td {
+    border-color: white;
+}

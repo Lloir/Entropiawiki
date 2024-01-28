@@ -22,17 +22,13 @@
     <title>Creatures</title>
 </head>
 
-<body class="bg-light">
-
-<!-- Bootstrap 5 Responsive Navbar -->
 <!-- Bootstrap 5 Responsive Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="#">
             <img src="/Images/logo.png" alt="EntropiaWiki.co.uk Logo" style="height: 80px;">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="true" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -61,7 +57,13 @@
             </ul>
         </div>
     </div>
+    <button id="darkModeToggle" type="button" class="btn btn-outline-primary" >
+        <img id="darkIcon" src="https://icons.getbootstrap.com/assets/icons/lightbulb.svg" alt="Dark Mode Icon">
+        <img id="lightIcon" src="https://icons.getbootstrap.com/assets/icons/lightbulb-fill.svg" alt="Light Mode Icon" style="display: none;">
+    </button>
+
 </nav>
+
 
 <div class="container mt-5 mx-auto">
     <h2 class="text-2xl font-bold mb-4">Mob Data</h2>
@@ -83,6 +85,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/fc-4.3.0/fh-3.4.0/r-2.5.0/rg-1.4.1/rr-1.4.1/sb-1.6.0/datatables.min.js"></script>
     <script src="../s/creaturestable.js"></script>
+    <script src="../s/darkmode.js"></script>
+
 
     <!-- Bootstrap 5 Modal scripts -->
     <script>
