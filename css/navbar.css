@@ -1,0 +1,42 @@
+/* Custom styles for the Bootstrap 5 Navbar */
+.navbar {
+    background-color: #343a40; /* Navbar background color */
+}
+
+.navbar-brand {
+    color: white; /* Navbar brand text color */
+}
+
+.navbar-brand img {
+    height: 80px; /* Logo height */
+}
+
+.navbar-nav .nav-link {
+    color: white; /* Navbar links text color */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffcc00; /* Navbar links text color on hover */
+}
+
+.navbar-toggler {
+    border-color: white; /* Navbar toggle button border color */
+}
+
+.navbar-toggler-icon {
+    background-color: white; /* Navbar toggle button icon color */
+}
+
+/* Dark mode styles */
+body.dark-mode .navbar {
+    background-color: #343a40; /* Dark mode navbar background color */
+}
+
+body.dark-mode .navbar-brand,
+body.dark-mode .navbar-nav .nav-link {
+    color: white; /* Dark mode navbar brand and links text color */
+}
+
+body.dark-mode .navbar-toggler-icon {
+    background-color: white; /* Dark mode navbar toggle button icon color */
+}

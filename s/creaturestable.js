@@ -108,7 +108,7 @@ $(document).ready(function () {
                 $('#expandModalBody').html(lootContent);
 
                 // Show the modal
-                my_modal_2.showModal();
+                $('#expandModal').modal('show');
             });
 
             // Handle link click event to open modal
@@ -117,11 +117,8 @@ $(document).ready(function () {
                 const data = dataTable.row($(this).closest('tr')).data();
                 const lootContent = data.LootNames.length ? data.LootNames.join('<br>') : 'No drops';
 
-                // Update the modal content
-                $('#expandModalBody').html(lootContent);
-
-                // Show the modal
-                my_modal_2.showModal();
+                // Show the modal using Bootstrap's show() method
+                $('#expandModal').modal('show');
             });
 
             // Add checkboxes for column visibility
