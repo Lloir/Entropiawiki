@@ -103,27 +103,6 @@ router.get('/mobs/planet', (req, res) => {
 });
 
 // Define the endpoint to fetch mob data with loot
-router.get('/mobs', (req, res) => {
-    console.log('Fetching mob data with loot...');
-    const sql = `
-        SELECT mob.ID, mob.Name AS MobName, 
-               CAST(mob.PlanetID AS SIGNED) AS PlanetID, 
-               planet.Name AS PlanetName, 
-               loot.drop_name AS LootNames
-        FROM wiki.mob AS mob 
-        LEFT JOIN wiki.planet AS planet ON mob.PlanetID = planet.ID
-        LEFT JOIN wiki.loot AS loot ON mob.ID = loot.MobID
-    `;
-    dbConnection.query(sql, (error, results) => {
-        if (error) {
-            console.error('Error executing database query:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
-        } else {
-            console.log('Mob data with loot fetched successfully:', results);
-            res.json(results);
-        }
-    });
-});
 
 // Define the endpoint to fetch society data
 router.get('/societies', (req, res) => {
@@ -150,31 +129,6 @@ router.get('/loot', (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
         } else {
             console.log('Loot data fetched successfully:', results);
-            res.json(results);
-        }
-    });
-});
-
-// Define the endpoint to fetch all data (mobs, planets, loot)
-router.get('/allData', (req, res) => {
-    console.log('Fetching all data (mobs, planets, loot)...');
-    const sql = `
-        SELECT mob.ID, mob.Name AS MobName, 
-               CAST(mob.PlanetID AS SIGNED) AS PlanetID, 
-               planet.Name AS PlanetName, 
-               GROUP_CONCAT(loot.drop_name) AS LootNames
-        FROM wiki.mob AS mob 
-        LEFT JOIN wiki.planet AS planet ON mob.PlanetID = planet.ID
-        LEFT JOIN wiki.loot AS loot ON mob.ID = loot.MobID
-        WHERE mob.Visible = 1
-        GROUP BY mob.ID;
-    `;
-    dbConnection.query(sql, (error, results) => {
-        if (error) {
-            console.error('Error executing database query:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
-        } else {
-            console.log('All data fetched successfully:', results);
             res.json(results);
         }
     });
@@ -239,35 +193,6 @@ router.get('/armor', (req, res) => {
     });
 });
 
-// Define the endpoint to fetch continent data
-router.get('/continents', (req, res) => {
-    console.log('Fetching continent data...');
-
-    const sqlContinents = `
-SELECT
-    PointX,
-    PointY,
-FROM wiki.continent
-WHERE Name = 'Calypso';
-    `;
-
-
-    dbConnection.query(sqlContinents, (error, results) => {
-        if (error) {
-            console.error('Error executing database query:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
-        } else {
-            // Map the results to add PlanetName and MapImagePath
-            const mappedResults = results.map(result => ({
-                ...result,
-                MapImagePath: `Images/Maps/${result.Image}`,
-            }));
-
-            console.log('Continent data fetched successfully:', mappedResults);
-            res.json(mappedResults);
-        }
-    });
-});
 
 // Define the endpoint to fetch location data
 router.get('/locations', (req, res) => {
