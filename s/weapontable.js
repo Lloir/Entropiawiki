@@ -73,7 +73,7 @@ $(document).ready(function () {
             scrollCollapse: true,
             scrollY: '50vh',
             scrollX: true,
-            autoWidth: false,
+            autoWidth: true,
             ordering: true,
             pagingType: "full",
             dom: '<"top"f>rt<"bottom"lip><"clear">',

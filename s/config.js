@@ -1,5 +1,3 @@
-// config.js
-
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -10,6 +8,10 @@ module.exports = {
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
+    },
+    emailConfig: {
+        user: process.env.EMAIL_USER,
+        password: process.env.EMAIL_PASSWORD,
     },
     certbotOptions: {
         email: process.env.CERTBOT_EMAIL,
