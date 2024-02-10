@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const redirectToSearch = () => {
                 const searchTerm = searchInputNavbar.value;
                 // Redirect to search.html with the search term
-                window.location.href = `../h/search.html?term=${searchTerm}`;
+                window.location.href = `../search.html`;
             };
 
             // Handle Enter key press in the search input

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weapons</title>
+    <title>Vehicle Table</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -15,14 +15,14 @@
     <!-- Bootswatch Theme -->
     <link href="https://bootswatch.com/5/flatly/bootstrap.min.css" rel="stylesheet">
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-
-
     <!-- Your CSS files -->
-    <link href="../css/dt.css" rel="stylesheet" type="text/css">
-    <link href="../css/style.css" rel="stylesheet" type="text/css">
-    <link href="../css/navbar.css" rel="stylesheet" type="text/css">
-    <title>Armor</title>
+    <link href="css/dt.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/navbar.css" rel="stylesheet" type="text/css">
+
+    <!-- Add DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" type="text/css">
+
 </head>
 
 <nav class="navbar navbar-expand-xxl navbar-light bg-dark">
@@ -33,25 +33,28 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href='/h/armor.html'>Armor</a>
+                <a class="nav-link" href='/armor.html'>Armor</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/weapons.html'>Weapons</a>
+                <a class="nav-link" href='/weapons.html'>Weapons</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/creatures.html'>Creatures</a>
+                <a class="nav-link" href='/creatures.html'>Creatures</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/socs.html'>Societies</a>
+                <a class="nav-link" href='/socs.html'>Societies</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/vehicles.html'>Vehicles</a>
+                <a class="nav-link" href='/vehicles.html'>Vehicles</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/theapi.html'>Api</a>
+                <a class="nav-link" href='/theapi.html'>Api</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/other-sites.html'>Other Sites</a>
+                <a class="nav-link" href='/other-sites.html'>Other Sites</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='/dps.html'>DPS Calc</a>
             </li>
         </ul>
     </div>
@@ -60,43 +63,30 @@
         <img id="lightIcon" src="https://icons.getbootstrap.com/assets/icons/lightbulb-fill.svg" alt="Light Mode Icon" style="display: none;">
     </button>
 </nav>
-
-<div class="container mt-5 mx-auto">
-    <h2 class="text-2xl font-bold mb-4"></h2>
-
-    <div id="checkboxContainer" class="flex space-x-4 mb-4">
-        <!-- Dynamically populate checkboxes here using JavaScript -->
-    </div>
-
-    <table id="yourTable" class="table-auto w-full cell-border compact stripe border-gray-800">
-        <thead class="bg-gray-800">
-
-        <tr>
-            <!-- Dynamically populate th elements for columns here using JavaScript -->
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Data will be dynamically populated here -->
-        </tbody>
-    </table>
-</div>
+<!-- Table to display vehicle data -->
+<table id="vehicleTable" class="table-auto w-full border border-collapse border-gray-800">
+    <thead class="bg-gray-800">
+    <tr>
+        <th class="px-4 py-2">Name</th>
+        <th class="px-4 py-2">Type</th>
+        <th class="px-4 py-2">Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Data will be dynamically populated here -->
+    </tbody>
+</table>
 
 <!-- Include necessary scripts -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/fc-4.3.0/fh-3.4.0/r-2.5.0/rg-1.4.1/rr-1.4.1/sb-1.6.0/datatables.min.js"></script>
-<script src="../s/darkmode.js"></script>
-<script src="../s/armortable.js"></script>
+<script src="js/vehicleTableScript.js"></script>
+<script src="js/darkmode.js"></script>
 
 </body>
-<!-- Footer -->
-<footer class="bg-gray-800 text-center py-2">
-    <div class="container mx-auto">
-        <p>&copy; 2024 EntropiaWiki.co.uk</p>
-        <a href="https://github.com/entropiawiki/entropiawiki" target="_blank">
-            <img src="https://icons.getbootstrap.com/assets/icons/github.svg" alt="GitHub Logo" class="h-6 inline-block">
-        </a>
-    </div>
-</footer>
+
 </html>

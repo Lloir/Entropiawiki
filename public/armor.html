@@ -19,19 +19,12 @@
 
 
     <!-- Your CSS files -->
-    <link href="../css/dt.css" rel="stylesheet" type="text/css">
-    <link href="../css/style.css" rel="stylesheet" type="text/css">
-    <link href="../css/navbar.css" rel="stylesheet" type="text/css">
-
-    <style>
-        .checkbox-wrapper {
-            margin-right: 10px;
-            white-space: nowrap;
-        }
-    </style>
+    <link href="css/dt.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/navbar.css" rel="stylesheet" type="text/css">
+    <title>Armor</title>
 </head>
 
-<!-- Bootstrap 5 Responsive Navbar -->
 <nav class="navbar navbar-expand-xxl navbar-light bg-dark">
     <img src="/Images/logo.png" alt="EntropiaWiki.co.uk Logo" style="height: 80px;">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,42 +33,46 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href='/h/armor.html'>Armor</a>
+                <a class="nav-link" href='/armor.html'>Armor</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/weapons.html'>Weapons</a>
+                <a class="nav-link" href='/weapons.html'>Weapons</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/creatures.html'>Creatures</a>
+                <a class="nav-link" href='/creatures.html'>Creatures</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/socs.html'>Societies</a>
+                <a class="nav-link" href='/socs.html'>Societies</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/vehicles.html'>Vehicles</a>
+                <a class="nav-link" href='/vehicles.html'>Vehicles</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/maps.html'>Maps</a>
+                <a class="nav-link" href='/theapi.html'>Api</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href='/h/other-sites.html'>Other Sites</a>
+                <a class="nav-link" href='/other-sites.html'>Other Sites</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='/dps.html'>DPS Calc</a>
             </li>
         </ul>
     </div>
-    <button id="darkModeToggle" type="button" class="btn btn-outline-primary" >
+    <button id="darkModeToggle" type="button" class="btn btn-outline-primary">
         <img id="darkIcon" src="https://icons.getbootstrap.com/assets/icons/lightbulb.svg" alt="Dark Mode Icon">
         <img id="lightIcon" src="https://icons.getbootstrap.com/assets/icons/lightbulb-fill.svg" alt="Light Mode Icon" style="display: none;">
     </button>
 </nav>
+
 <div class="container mt-5 mx-auto">
     <h2 class="text-2xl font-bold mb-4"></h2>
 
-    <div id="checkboxContainer" class="flex flex-wrap space-x-4 mb-4">
+    <div id="checkboxContainer" class="flex space-x-4 mb-4">
         <!-- Dynamically populate checkboxes here using JavaScript -->
     </div>
 
-    <table id="weaponTable" class="table-auto w-full cell-border table-striped stripe border-gray-800">
-
+    <table id="yourTable" class="table-auto w-full cell-border compact stripe border-gray-800">
+        <thead class="bg-gray-800">
 
         <tr>
             <!-- Dynamically populate th elements for columns here using JavaScript -->
@@ -92,8 +89,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/fc-4.3.0/fh-3.4.0/r-2.5.0/rg-1.4.1/rr-1.4.1/sb-1.6.0/datatables.min.js"></script>
-<script src="../s/darkmode.js"></script>
-<script src="../s/weapontable.js"></script>
+<script src="js/darkmode.js"></script>
+<script src="js/armortable.js"></script>
 
 </body>
 <!-- Footer -->

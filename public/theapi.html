@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Other sites</title>
+    <title>API</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -15,15 +15,15 @@
     <!-- Bootswatch Theme -->
     <link href="https://bootswatch.com/5/flatly/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS files -->
-    <link href="../css/dt.css" rel="stylesheet" type="text/css">
-    <link href="../css/style.css" rel="stylesheet" type="text/css">
-    <link href="../css/navbar.css" rel="stylesheet" type="text/css">
-</head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Your CSS files -->
+    <link href="css/dt.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/navbar.css" rel="stylesheet" type="text/css">
 
 <body>
-
-<!-- Bootstrap 5 Responsive Navbar -->
 <nav class="navbar navbar-expand-xxl navbar-light bg-dark">
     <img src="/Images/logo.png" alt="EntropiaWiki.co.uk Logo" style="height: 80px;">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,33 +59,48 @@
         <img id="lightIcon" src="https://icons.getbootstrap.com/assets/icons/lightbulb-fill.svg" alt="Light Mode Icon" style="display: none;">
     </button>
 </nav>
+<div class="container mt-5">
+    <h2>EntropiaWiki API Usage Guide</h2>
 
+    <p>The EntropiaWiki API provides endpoints to retrieve data related to planets, mobs, societies, loot, vehicles, armor, continents, locations, and weapons from the Entropia Universe. This guide outlines the available endpoints and provides instructions on how to use them.</p>
+
+    <p><strong>Base URL:</strong> <code>https://entropiawiki.co.uk/api/</code></p>
+
+    <ol>
+        <li>
+            <p><strong>Fetch Planet Data</strong></p>
+            <p><strong>Endpoint:</strong> <code>https://entropiawiki.co.uk/api/planets</code></p>
+            <p><strong>Method:</strong> GET</p>
+            <p><strong>Description:</strong> Fetches information about planets in the Entropia Universe.</p>
+        </li>
+
+        <!-- Repeat similar structure for other items -->
+
+        <li>
+            <p><strong>Fetch Weapon Data</strong></p>
+            <p><strong>Endpoint:</strong> <code>https://entropiawiki.co.uk/api/weapon</code></p>
+            <p><strong>Method:</strong> GET</p>
+            <p><strong>Description:</strong> Retrieves information about weapons and their attributes.</p>
+        </li>
+    </ol>
+
+    <p><strong>Example Usage:</strong></p>
+
+    <p><strong>Using Fetch in JavaScript:</strong></p>
+    <pre><code>fetch('https://entropiawiki.co.uk/api/planets')
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));</code></pre>
+
+    <p><strong>Using Axios in JavaScript:</strong></p>
+    <pre><code>axios.get('https://entropiawiki.co.uk/api/mobs')
+    .then(response => console.log(response.data))
+    .catch(error => console.error('Error:', error));</code></pre>
+
+    <p>Please ensure you have proper permissions and adhere to the terms of use outlined by EntropiaWiki.co.uk for accessing and using their API.</p>
+</div>
 </body>
-<table class="table-auto w-full cell-border compact stripe border-gray-800">
-    <thead>
-    <tr>
-        <th>Category</th>
-        <th>Link</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Maps</td>
-        <td><a href="https://space.calypsomap.com/" target="_blank">Space maps</a></td>
-    </tr>
-    <tr>
-        <td>Maps</td>
-        <td><a href="https://www.calypsomap.com/" target="_blank">Calypso Maps</a></td>
-    </tr>
-    <tr>
-        <td>Tools</td>
-        <td><!-- Add your tools link here --></td>
-    </tr>
-    <tr>
-        <td>Streamers</td>
-        <td><!-- Add your streamers link here --></td>
-    </tr>
-    </tbody>
-</table>
 </html>
-<script src="../s/darkmode.js"></script>
+
+<!-- Your custom scripts -->
+    <script src="js/darkmode.js"></script>

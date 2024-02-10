@@ -1,82 +1,41 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
-const mysql = require('mysql2');
-const config = require('./config.js');
+const db = require('./db'); // Assumes you'll set up your database connector here
 
 const router = express.Router();
-const dbConnection = mysql.createConnection(config.dbConfig);
+const MAX_API_REQUESTS_PER_WINDOW = 100; // Customize your rate limit
+const WINDOW_DURATION_MS = 15 * 60 * 1000; // 15 minutes
 
-// Configure rate limiting (e.g., 100 requests per 15 minutes)
+// Configure rate limiting
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
+    windowMs: WINDOW_DURATION_MS,
+    max: MAX_API_REQUESTS_PER_WINDOW
 });
 
-// Apply rate limiting to all routes in the router
-router.use(limiter);
-// Define the endpoint to fetch planet data
-router.get('/planets', (req, res) => {
-    console.log('Fetching planet data...');
-    const sql = 'SELECT ID, Name FROM planet WHERE Visible = 1';
-    dbConnection.query(sql, (error, results) => {
-        if (error) {
-            console.error('Error executing database query:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
-        } else {
-            console.log('Planet data fetched successfully:', results);
-            res.json(results);
-        }
-    });
+router.use(limiter); // Apply to all routes
+
+// API Routes
+router.get('/planets', async (req, res) => {
+    try {
+        const planets = await db.Planet.findAll(); // Placeholder - adjust  if not using ORM
+        res.json(planets);
+    } catch (error) {
+        console.error('Error fetching planets:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
-// Define the endpoint to fetch mob data with loot
-router.get('/mobs', (req, res) => {
-    console.log('Fetching mob data with loot...');
-    const sql = `
-        SELECT
-            mob.ID,
-            mob.Name AS MobName,
-            mob.Stab,
-            mob.Cut,
-            mob.Impact,
-            mob.Penetration,
-            mob.Shrapnel,
-            mob.Burn,
-            mob.Cold,
-            mob.Acid,
-            mob.Electric,
-            mob.Speed,
-            mob.Combat,
-            mob.Movement,
-            mob.ClassID,
-            mob.ImageID,
-            mob.Visible,
-            mob.Tamable,
-            mob.Sweatable,
-            mob.ActivityID,
-            mob.ScanActID,
-            mob.Attacks,
-            mob.Range,
-            mob.Aggression,
-            mob.PlanetID,
-            mob.MinHP,
-            mob.MinGlobal,
-            planet.Name AS PlanetName,
-            GROUP_CONCAT(loot.drop_name) AS LootNames
-        FROM wiki.mob AS mob
-        LEFT JOIN wiki.planet AS planet ON mob.PlanetID = planet.ID
-        LEFT JOIN wiki.loot AS loot ON mob.ID = loot.MobID
-        GROUP BY mob.ID;
-    `;
-    dbConnection.query(sql, (error, results) => {
-        if (error) {
-            console.error('Error executing database query:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
-        } else {
-            console.log('Mob data with loot fetched successfully:', results);
-            res.json(results);
-        }
-    });
+// Fetch Mobs with Loot (NEEDS SECURITY ATTENTION)
+router.get('/mobs', async (req, res) => {
+    try {
+        const mobs = await db.Mob.findAll({
+            include: [db.Loot, db.Planet] // Assuming model associations if using Sequelize
+        });
+        res.json(mobs);
+    } catch (error) {
+        console.error('Error fetching mobs:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
 // Define the endpoint to fetch mob data with planet information
