@@ -1,0 +1,68 @@
+<!-- search.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Search Results</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../public/build/tailwind.css">
+</head>
+
+<body>
+<!-- Container for including the navbar -->
+<div id="navbarContainer"></div>
+
+<div class="container mt-5">
+    <h2>Search Results</h2>
+
+    <table id="searchResultsTable" class="table table-dark table-striped">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">MobName</th>
+            <th scope="col">PlanetName</th>
+            <th scope="col">LootNames</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Table data will be dynamically populated here -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Include necessary scripts -->
+<script src="/s/navbar.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+<script>
+    // Assuming you have a variable named searchResults containing the search data
+    const searchResults = [
+        { ID: 1, MobName: 'Mob 1', PlanetName: 'Planet A', LootNames: 'Loot A' },
+        { ID: 2, MobName: 'Mob 2', PlanetName: 'Planet B', LootNames: 'Loot B' },
+        // Add more search result data as needed
+    ];
+
+    $(document).ready(function () {
+        // Initialize DataTable with the search results
+        $('#searchResultsTable').DataTable({
+            data: searchResults,
+            columns: [
+                { data: 'ID' },
+                { data: 'MobName' },
+                { data: 'PlanetName' },
+                { data: 'LootNames' },
+            ],
+            paging: true, // Enable pagination
+            autoWidth: true,
+            ordering: true,
+            pagingType: "full",
+            dom: '<"top"f>rt<"bottom"lip><"clear">', paging: true, lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ], pageLength: 20,
+        });
+    });
+</script>
+</body>
+
+</html>

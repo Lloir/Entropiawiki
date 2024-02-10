@@ -1,0 +1,16 @@
+/* Import OpenDyslexic */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('fonts/OpenDyslexic-Regular.otf') format('opentype'); /* Adjust file name as needed */
+}
+
+/* General Styles (Dyslexia-Friendly Mode) */
+body.dyslexiaMode { /* Target a class on the body */
+    font-family: 'OpenDyslexic', sans-serif;
+}
+
+/* Other Styles */
+/* You can either:
+   1. Copy additional styles from your original 'style.css' here, OR
+   2. Include your original 'style.css' AFTER this file so its rules cascade normally
+*/

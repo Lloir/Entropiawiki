@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/fc-4.3.0/fh-3.4.0/r-2.5.0/rg-1.4.1/rr-1.4.1/sb-1.6.0/datatables.min.css" rel="stylesheet">
+
+    <!-- Bootswatch Theme -->
+    <link href="https://bootswatch.com/5/flatly/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Your CSS files -->
+    <link href="/css/dt.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <link href="/css/navbar.css" rel="stylesheet" type="text/css">
+
+    <nav class="navbar navbar-expand-xxl navbar-light bg-dark">
+        <img src="/Images/logo.png" alt="EntropiaWiki.co.uk Logo" style="height: 80px;">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href='/armor.html'>Armor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/weapons.html'>Weapons</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/creatures.html'>Creatures</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/socs.html'>Societies</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/vehicles.html'>Vehicles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/theapi.html'>Api</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/other-sites.html'>Other Sites</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/dps.html'>DPS Calc</a>
+                </li>
+            </ul>
+        </div>
+        <button id="darkModeToggle" type="button" class="btn btn-outline-primary">
+            <img id="darkIcon" src="https://icons.getbootstrap.com/assets/icons/lightbulb.svg" alt="Dark Mode Icon">
+            <img id="lightIcon" src="https://icons.getbootstrap.com/assets/icons/lightbulb-fill.svg" alt="Light Mode Icon" style="display: none;">
+        </button>
+    </nav>
+
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Entropia Damage Calculator</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="maxDmg">Maximum Damage:</label>
+                <input type="number" class="form-control" id="maxDmg">
+                <div id="maxDmgError" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="isUnmaxed">Is Weapon Unmaxed:</label>
+                <input type="checkbox" id="isUnmaxed">
+            </div>
+            <div class="form-group">
+                <label for="attacks">Attacks:</label>
+                <input type="number" class="form-control" id="attacks">
+                <div id="attacksError" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="decay">Decay:</label>
+                <input type="number" class="form-control" id="decay">
+                <div id="decayError" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="ammo">Ammo Cost:</label>
+                <input type="number" class="form-control" id="ammo">
+                <div id="ammoError" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="critDmgBuff">Critical Damage Buff:</label>
+                <input type="number" class="form-control" id="critDmgBuff">
+                <div id="critDmgBuffError" class="error-message"></div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="calculateDamage()">Calculate</button>
+        </div>
+
+        <div class="col-md-6">
+            <div id="results" class="mt-3">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculateDamage() {
+        // Get input values
+        let isValid = true;
+        if (!validateInput("maxDmg")) isValid = false;
+        if (!validateInput("attacks")) isValid = false;
+        if (!validateInput("critDmgBuff")) isValid = false;
+        if (!validateInput("decay")) isValid = false;
+        if (!validateInput("ammo")) isValid = false;
+        if (!isValid) return;
+
+        // --- CALCULATION LOGIC ---
+        let maxDmg = parseFloat(document.getElementById("maxDmg").value);
+        let critDmgBuff = parseFloat(document.getElementById("critDmgBuff").value);
+        let attacks = parseFloat(document.getElementById("attacks").value);
+        let decay = parseFloat(document.getElementById("decay").value);
+        let ammo = parseFloat(document.getElementById("ammo").value);
+        let isUnmaxed = document.getElementById("isUnmaxed").checked;
+
+
+        // Hit, Crit, and Rate Calculations
+        let hitLvl = 100;
+        let hitLvlRec = 0;
+        let hitLvlMaxed = 0;
+        let HA = 0;
+        let CHA = 0;
+        let hitRate = 0;
+        let critRate = 0;
+
+        if (isUnmaxed) {
+            // Non-SIB Calculations
+            HA = 4 + 0.06 * hitLvl;
+            CHA = Math.sqrt(hitLvl);
+        } else {
+            // SIB Calculations
+            let progressToMax = (hitLvl - hitLvlRec) / (hitLvlMaxed - hitLvlRec);
+            HA = 6 + progressToMax * 4;
+            CHA = Math.sqrt(progressToMax) * 10;
+        }
+
+        hitRate = HA + 80;
+        critRate = 0.01 + (0.001 * CHA);
+
+
+        // YOUR EXISTING CALCULATIONS
+        let avgDmg = maxDmg * 0.9 * 0.75;
+        let avgCritDmg = 0.02 * ((maxDmg + avgDmg) * critDmgBuff) - avgDmg;
+        let effectiveDmg = avgDmg + avgCritDmg;
+        let dps = effectiveDmg * attacks;
+        let dpp = effectiveDmg / (decay + ammo);
+        // Update results
+        let resultsDiv = document.getElementById("results");
+        resultsDiv.innerHTML = `
+                <h3>Results</h3>
+                <p>Average Damage: ${avgDmg}</p>
+                <p>Average Critical Damage: ${avgCritDmg}</p>
+                <p>Effective Damage: ${effectiveDmg}</p>
+                <p>DPS: ${dps}</p>
+                <p>DPP: ${dpp}</p>
+                <p>Hit Rate: ${hitRate}</p>
+                <p>Critical Hit Rate: ${critRate}</p>
+            `;
+    }
+    function validateInput(inputId) {
+        let value = parseFloat(document.getElementById(inputId).value);
+        let errorElement = document.getElementById(inputId + "Error");
+
+        if (isNaN(value)) {
+            errorElement.innerText = "Please enter a valid number";
+            return false;
+        } else {
+            errorElement.innerText = ""; // Clear error
+            return true;
+        }
+    }
+    // Function to clear all input fields
+    function clearInputFields() {
+        document.getElementById("maxDmg").value = "";
+        document.getElementById("attacks").value = "";
+        document.getElementById("isUnmaxed").checked = false;
+    }
+
+    // Call the clear function when the page loads
+    window.onload = clearInputFields;
+</script>
+<!-- Include necessary scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/fc-4.3.0/fh-3.4.0/r-2.5.0/rg-1.4.1/rr-1.4.1/sb-1.6.0/datatables.min.js"></script>
+<script src="/js/darkmode.js"></script>
+
+</body>
+</html>
+<body>
+
+</body>
